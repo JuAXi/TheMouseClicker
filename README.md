@@ -20,4 +20,4 @@ Functions：</br>
 2.Record the action of your mouse and keyboard</br>
 
 Specially:</br>
-If it doesn't work, maybe you can open it 
+If it doesn't work, maybe you can open it with "Run as administrator"?
