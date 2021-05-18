@@ -6,6 +6,7 @@
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")	//更改UI		//Change UI
 
 CString version = L"鼠标点击7.0.0";
+CString add = L"https://github.com/JuAXi/TheMouseClicker";
 
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0)
 #define KEY_UP(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 0:1)
@@ -13,14 +14,15 @@ CString version = L"鼠标点击7.0.0";
 #define BUTTON1 5336
 #define BUTTON2 5337
 #define BUTTON3 5338
-#define BUTTON_SUREL 5339
-#define BUTTON_SURER 5340
-#define BUTTON_CANCEL 5341
-#define Input_Time 5342
-#define Output_Name 5343
-#define Input_Name 5344
-#define BUTTON_OUTPUT 5345
-#define BUTTON_INPUT 5346
+#define BUTTON4 5339
+#define BUTTON_SUREL 5340
+#define BUTTON_SURER 5341
+#define BUTTON_CANCEL 5342
+#define Input_Time 5343
+#define Output_Name 5344
+#define Input_Name 5345
+#define BUTTON_OUTPUT 5346
+#define BUTTON_INPUT 5347
 
 const int minutes = 60;
 const int time_interval = 10;
@@ -518,7 +520,7 @@ LRESULT WINAPI TimeReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 LRESULT WINAPI React(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	HWND hwndButton1, hwndButton2, hwndButton3, text;
+	HWND hwndButton1, hwndButton2, hwndButton3, hwndButton4, text;
 	bool record_button = false;
 	switch (msg)
 	{
@@ -527,11 +529,13 @@ LRESULT WINAPI React(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			text = CreateWindow(L"static", version, WS_CHILD | WS_VISIBLE, 90, 50, 200, 20, hwnd, (HMENU)1, NULL, 0);
 			hwndButton1 = CreateWindowEx(NULL, TEXT("Button"), TEXT("1.连点器（按“ESC”退出）"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 100, 265, 50, hwnd, (HMENU)BUTTON1, NULL, NULL);
 			hwndButton2 = CreateWindowEx(NULL, TEXT("Button"), TEXT("2.录制"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 175, 265, 50, hwnd, (HMENU)BUTTON2, NULL, NULL);
-			SendMessage(hwndButton2, WM_SETFONT, (WPARAM)font, TRUE);
 			hwndButton3 = CreateWindowEx(NULL, TEXT("Button"), TEXT("3.播放"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 250, 265, 50, hwnd, (HMENU)BUTTON3, NULL, NULL);
+			hwndButton4 = CreateWindowEx(NULL, TEXT("Button"), TEXT("4.项目地址"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 325, 265, 50, hwnd, (HMENU)BUTTON4, NULL, NULL);
 			SendMessage(text, WM_SETFONT, (WPARAM)font, TRUE);
 			SendMessage(hwndButton1, WM_SETFONT, (WPARAM)font, TRUE);
+			SendMessage(hwndButton2, WM_SETFONT, (WPARAM)font, TRUE);
 			SendMessage(hwndButton3, WM_SETFONT, (WPARAM)font, TRUE);
+			SendMessage(hwndButton4, WM_SETFONT, (WPARAM)font, TRUE);
 			break;
 		}
 		case WM_CTLCOLORSTATIC:
@@ -580,6 +584,12 @@ LRESULT WINAPI React(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					Sleep(10);
 					display.detach();
 					UpdateWindow(hwnd);
+					break;
+				}
+				case BUTTON4:
+				{
+					ShellExecute(NULL, L"open", L"explorer.exe", add, NULL, SW_SHOW);
+					Sleep(10);
 					break;
 				}
 			}
@@ -700,7 +710,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	//创建窗口
-	HWND main_win = CreateWindowEx(NULL, L"Main", version, WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE | WM_CTLCOLORSTATIC, 100, 100, 300, 400, NULL, NULL, hInstance, NULL);
+	HWND main_win = CreateWindowEx(NULL, L"Main", version, WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE | WM_CTLCOLORSTATIC, 100, 100, 300, 450, NULL, NULL, hInstance, NULL);
 
 	//ShowWindow(main_win, SW_SHOW);
 	UpdateWindow(main_win);
