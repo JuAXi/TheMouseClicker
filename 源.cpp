@@ -15,8 +15,8 @@ CString add = L"https://github.com/JuAXi/TheMouseClicker";
 #define BUTTON2 5337
 #define BUTTON3 5338
 #define BUTTON4 5339
-#define BUTTON_SUREL 5340
-#define BUTTON_SURER 5341
+#define BUTTON_SURE 5340
+#define BUTTON_SElECT_KEY 5341
 #define BUTTON_CANCEL 5342
 #define Input_Time 5343
 #define Output_Name 5344
@@ -30,11 +30,405 @@ const int total_times = minutes * 60 * (1000 / time_interval);
 
 bool input_success = false;
 
-int key_press[total_times][255] = { 0 }, count = 0;
-bool i_down[255] = { false };
+int key_click = 1;
+int key_press[total_times][254] = { 0 }, count = 0;
+bool i_down[254] = { false };
 POINT point[total_times];
+CString now_key_click = L"当前按键为：";
 
-HFONT font = CreateFont(18, 9, 0, 0, 600, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, L"宋体");
+const HFONT font = CreateFont(18, 9, 0, 0, 600, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, L"宋体");
+
+void GetKey()
+{
+	bool is_continue = true;
+	while (is_continue)
+	{
+		for (int i = 0; i < 254; i++)
+		{
+			if ((i < 3) || (i > 7 && i < 10) || (i > 11 && i < 14) || (i > 19 && i < 21) || (i > 31 && i < 58) || (i > 54 && i < 94) || (i > 94 && i < 124) || (i > 143 && i < 146) || (i > 159 && i < 166) || (i > 172 && i < 176) || (i > 185 && i < 223))
+			{
+				if (KEY_DOWN(i) == true)
+				{
+					key_click = i;
+					is_continue = false;
+					break;
+				}
+			}
+			else
+				continue;
+		}
+	}
+}
+
+void SetNowKeyClick()
+{
+	now_key_click = L"当前按键为：";
+	now_key_click.ReleaseBuffer();
+	CString temp;
+	switch (key_click)
+	{
+	case 1:
+		temp = L"LButton";
+		break;
+	case 2:
+		temp = L"RButton";
+		break;
+	case 8:
+		temp = L"Back";
+		break;
+	case 9:
+		temp = L"Tab";
+		break;
+	case 12:
+		temp = L"Clear";
+		break;
+	case 13:
+		temp = L"Enter";
+		break;
+	case 19:
+		temp = L"Pause";
+		break;
+	case 20:
+		temp = L"Caps Lock";
+		break;
+	case 32:
+		temp = L"Space";
+		break;
+	case 33:
+		temp = L"Page Up";
+		break;
+	case 34:
+		temp = L"Page Down";
+		break;
+	case 35:
+		temp = L"End";
+		break;
+	case 36:
+		temp = L"Home";
+		break;
+	case 37:
+		temp = L"Left Arrow";
+		break;
+	case 38:
+		temp = L"Up Arrow";
+		break;
+	case 39:
+		temp = L"Right Arrow";
+		break;
+	case 40:
+		temp = L"Down Arrow";
+		break;
+	case 41:
+		temp = L"Select";
+		break;
+	case 42:
+		temp = L"Print";
+		break;
+	case 43:
+		temp = L"Execute";
+		break;
+	case 44:
+		temp = L"Snapshot";
+		break;
+	case 45:
+		temp = L"Insert";
+		break;
+	case 46:
+		temp = L"Delete";
+		break;
+	case 47:
+		temp = L"Help";
+		break;
+	case 48:
+		temp = L"0";
+		break;
+	case 49:
+		temp = L"1";
+		break;
+	case 50:
+		temp = L"2";
+		break;
+	case 51:
+		temp = L"3";
+		break;
+	case 52:
+		temp = L"4";
+		break;
+	case 53:
+		temp = L"5";
+		break;
+	case 54:
+		temp = L"6";
+		break;
+	case 55:
+		temp = L"7";
+		break;
+	case 56:
+		temp = L"8";
+		break;
+	case 57:
+		temp = L"9";
+		break;
+	case 65:
+		temp = L"A";
+		break;
+	case 66:
+		temp = L"B";
+		break;
+	case 67:
+		temp = L"C";
+		break;
+	case 68:
+		temp = L"D";
+		break;
+	case 69:
+		temp = L"E";
+		break;
+	case 70:
+		temp = L"F";
+		break;
+	case 71:
+		temp = L"G";
+		break;
+	case 72:
+		temp = L"H";
+		break;
+	case 73:
+		temp = L"I";
+		break;
+	case 74:
+		temp = L"J";
+		break;
+	case 75:
+		temp = L"K";
+		break;
+	case 76:
+		temp = L"L";
+		break;
+	case 77:
+		temp = L"M";
+		break;
+	case 78:
+		temp = L"N";
+		break;
+	case 79:
+		temp = L"O";
+		break;
+	case 80:
+		temp = L"P";
+		break;
+	case 81:
+		temp = L"Q";
+		break;
+	case 82:
+		temp = L"R";
+		break;
+	case 83:
+		temp = L"S";
+		break;
+	case 84:
+		temp = L"T";
+		break;
+	case 85:
+		temp = L"U";
+		break;
+	case 86:
+		temp = L"V";
+		break;
+	case 87:
+		temp = L"W";
+		break;
+	case 88:
+		temp = L"X";
+		break;
+	case 89:
+		temp = L"Y";
+		break;
+	case 90:
+		temp = L"Z";
+		break;
+	case 91:
+		temp = L"LWin";
+		break;
+	case 92:
+		temp = L"RWin";
+		break;
+	case 93:
+		temp = L"Apps";
+		break;
+	case 95:
+		temp = L"Sleep";
+		break;
+	case 96:
+		temp = L"0";
+		break;
+	case 97:
+		temp = L"1";
+		break;
+	case 98:
+		temp = L"2";
+		break;
+	case 99:
+		temp = L"3";
+		break;
+	case 100:
+		temp = L"4";
+		break;
+	case 101:
+		temp = L"5";
+		break;
+	case 102:
+		temp = L"6";
+		break;
+	case 103:
+		temp = L"7";
+		break;
+	case 104:
+		temp = L"8";
+		break;
+	case 105:
+		temp = L"9";
+		break;
+	case 106:
+		temp = L"*";
+		break;
+	case 107:
+		temp = L"+";
+		break;
+	case 108:
+		temp = L"Enter";
+		break;
+	case 109:
+		temp = L"-";
+		break;
+	case 110:
+		temp = L".";
+		break;
+	case 111:
+		temp = L"/";
+		break;
+	case 112:
+		temp = L"F1";
+		break;
+	case 113:
+		temp = L"F2";
+		break;
+	case 114:
+		temp = L"F3";
+		break;
+	case 115:
+		temp = L"F4";
+		break;
+	case 116:
+		temp = L"F5";
+		break;
+	case 117:
+		temp = L"F6";
+		break;
+	case 118:
+		temp = L"F7";
+		break;
+	case 119:
+		temp = L"F8";
+		break;
+	case 120:
+		temp = L"F9";
+		break;
+	case 121:
+		temp = L"F10";
+		break;
+	case 122:
+		temp = L"F11";
+		break;
+	case 123:
+		temp = L"F12";
+		break;
+	case 144:
+		temp = L"Num Lock";
+		break;
+	case 145:
+		temp = L"Scroll";
+		break;
+	case 160:
+		temp = L"LShift";
+		break;
+	case 161:
+		temp = L"RShift";
+		break;
+	case 162:
+		temp = L"LCtrl";
+		break;
+	case 163:
+		temp = L"RCtrl";
+		break;
+	case 164:
+		temp = L"LAlt";
+		break;
+	case 165:
+		temp = L"RAlt";
+		break;
+	case 173:
+		temp = L"Volume Mute";
+		break;
+	case 174:
+		temp = L"Volume Down";
+		break;
+	case 175:
+		temp = L"Volume Up";
+		break;
+	case 186:
+		temp = L";";
+		break;
+	case 187:
+		temp = L"=";
+		break;
+	case 188:
+		temp = L",";
+		break;
+	case 189:
+		temp = L"-";
+		break;
+	case 190:
+		temp = L".";
+		break;
+	case 191:
+		temp = L"/";
+		break;
+	case 192:
+		temp = L"`";
+		break;
+	case 219:
+		temp = L"[";
+		break;
+	case 220:
+		temp = L"\\";
+		break;
+	case 221:
+		temp = L"]";
+		break;
+	case 222:
+		temp = L"\'";
+		break;
+	}
+	temp.ReleaseBuffer();
+	now_key_click += temp;
+}
+
+void SetIni()
+{
+	CString temp_key_click;
+	GetPrivateProfileString(L"TheMouseClicker", L"ClickKey", L"1", temp_key_click.GetBuffer(4), 4, L"./TheMouseClicker.ini");
+	temp_key_click.ReleaseBuffer();
+	key_click = _ttoi(temp_key_click);
+	SetNowKeyClick();
+}
+
+void SaveIni()
+{
+	CString temp_key_click;
+	temp_key_click.Format(L"%d", key_click);
+	WritePrivateProfileString(L"TheMouseClicker", L"ClickKey", temp_key_click, L"./TheMouseClicker.ini");
+}
 
 void CreateData()
 {
@@ -54,88 +448,121 @@ bool IsSameName(CString output_txt)
 		return false;
 }
 
-void ClickR(double count_time)
+void Click(double count_time)
 {
 	bool Continue = true;
 	double time0 = GetTickCount(), time1 = 0;
-	while (true)
-	{
-		if (Continue == true)
+	if (key_click == 1)
+		while (true)
 		{
-			time1 = GetTickCount();
-			if (KEY_DOWN(4))
+			if (Continue == true)
 			{
-				Continue = false;
-				Sleep(500);
+				time1 = GetTickCount();
+				if (KEY_DOWN(4))
+				{
+					Continue = false;
+					Sleep(500);
+				}
+				if (KEY_DOWN(27))
+				{
+					break;
+				}
+				if ((time1 - time0) > count_time)
+				{
+					mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+					Sleep(10);
+					mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+					time0 = GetTickCount();
+				}
 			}
-			if (KEY_DOWN(27))
+			if (Continue == false)
 			{
-				break;
+				if (KEY_DOWN(4))
+				{
+					Continue = true;
+					Sleep(500);
+				}
+				if (KEY_DOWN(27))
+				{
+					break;
+				}
 			}
-			if ((time1 - time0) > count_time)
-			{
-				mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0);
-				Sleep(10);
-				mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
-				time0 = GetTickCount();
-			}
+			Sleep(1);
 		}
-		if (Continue == false)
+	else if (key_click == 2)
+		while (true)
 		{
-			if (KEY_DOWN(4))
+			if (Continue == true)
 			{
-				Continue = true;
-				Sleep(500);
+				time1 = GetTickCount();
+				if (KEY_DOWN(4))
+				{
+					Continue = false;
+					Sleep(500);
+				}
+				if (KEY_DOWN(27))
+				{
+					break;
+				}
+				if ((time1 - time0) > count_time)
+				{
+					mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0);
+					Sleep(10);
+					mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
+					time0 = GetTickCount();
+				}
 			}
-			if (KEY_DOWN(27))
+			if (Continue == false)
 			{
-				break;
+				if (KEY_DOWN(4))
+				{
+					Continue = true;
+					Sleep(500);
+				}
+				if (KEY_DOWN(27))
+				{
+					break;
+				}
 			}
+			Sleep(1);
 		}
-		Sleep(1);
-	}
-}
-
-void ClickL(double count_time)
-{
-	bool Continue = true;
-	double time0 = GetTickCount(), time1 = 0;
-	while (true)
-	{
-		if (Continue == true)
+	else
+		while (true)
 		{
-			time1 = GetTickCount();
-			if (KEY_DOWN(4))
+			if (Continue == true)
 			{
-				Continue = false;
-				Sleep(500);
+				time1 = GetTickCount();
+				if (KEY_DOWN(4))
+				{
+					Continue = false;
+					Sleep(500);
+				}
+				if (KEY_DOWN(27))
+				{
+					break;
+				}
+				if ((time1 - time0) > count_time)
+				{
+					keybd_event(key_click, 0, 0, 0);
+					Sleep(10);
+					keybd_event(key_click, 0, KEYEVENTF_KEYUP, 0);
+					time0 = GetTickCount();
+				}
 			}
-			if (KEY_DOWN(27))
+			if (Continue == false)
 			{
-				break;
+				if (KEY_DOWN(4))
+				{
+					Continue = true;
+					Sleep(500);
+				}
+				if (KEY_DOWN(27))
+				{
+					break;
+				}
 			}
-			if ((time1 - time0) > count_time)
-			{
-				mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-				Sleep(10);
-				mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-				time0 = GetTickCount();
-			}
+			Sleep(1);
 		}
-		if (Continue == false)
-		{
-			if (KEY_DOWN(4))
-			{
-				Continue = true;
-				Sleep(500);
-			}
-			if (KEY_DOWN(27))
-			{
-				break;
-			}
-		}
-		Sleep(1);
-	}
 }
 
 void Record()
@@ -148,7 +575,7 @@ void Record()
 	{
 		GetCursorPos(&p);
 		point[count] = p;
-		for (i = 0; i < 255; i++)
+		for (i = 0; i < 254; i++)
 		{
 			if (i != 27)
 			{
@@ -202,7 +629,7 @@ void Display()
 			while (i <= count)
 			{
 				SetCursorPos(point[i].x, point[i].y);
-				for (int j = 0; j < 255; j++)
+				for (int j = 1; j < 254; j++)
 				{
 					if (j < 6)
 					{
@@ -268,7 +695,7 @@ void Display()
 	input_success = false;
 }
 
-LRESULT WINAPI RecordInputReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT WINAPI RecordInputWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND name_get = NULL, button_ok;
 	switch (msg)
@@ -382,7 +809,7 @@ LRESULT WINAPI RecordOutputReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 				output << std::endl;
 				for (int i = 0; i <= count; i++)
 				{
-					for (int j = 0; j < 255; j++)
+					for (int j = 0; j < 254; j++)
 					{
 						if (key_press[i][j] != 0)
 						{
@@ -412,21 +839,23 @@ LRESULT WINAPI RecordOutputReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-LRESULT WINAPI TimeReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT WINAPI TimeWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND text1, time_get = NULL, button_okl, button_cancel, button_okr, text2, main_win;
+	static HWND hwnd_now_key;
 	main_win = FindWindow(NULL, version);
 	double count_time = 0;
 	switch (msg)
 	{
-		case WM_CREATE:
+		case WM_PAINT:
 		{
 			text1 = CreateWindow(L"static", L"请输入时间（单位:秒）", WS_CHILD | WS_VISIBLE, 10, 10, 200, 30, hwnd, (HMENU)1, NULL, 0);
+			hwnd_now_key = CreateWindow(L"edit", now_key_click, ES_READONLY | WS_CHILD | WS_VISIBLE, 210, 35, 180, 18, hwnd, (HMENU)1, NULL, 0);
 			text2 = CreateWindow(L"static", L"开始后，按鼠标滚轮停止，按‘ESC’结束", WS_CHILD | WS_VISIBLE, 5, 70, 400, 30, hwnd, (HMENU)1, NULL, 0);
-			time_get = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 10, 35, 250, 30, hwnd, (HMENU)Input_Time, NULL, NULL);
-			button_okl = CreateWindow(L"button", L"左键", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 20, 100, 70, 50, hwnd, (HMENU)BUTTON_SUREL, NULL, NULL);
-			button_okr = CreateWindow(L"button", L"右键", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 100, 100, 70, 50, hwnd, (HMENU)BUTTON_SURER, NULL, NULL);
-			button_cancel = CreateWindow(L"button", L"取消", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 180, 100, 70, 50, hwnd, (HMENU)BUTTON_CANCEL, NULL, NULL);
+			time_get = CreateWindow(L"edit", NULL, WS_CHILD | WS_VISIBLE | WS_BORDER, 10, 35, 195, 30, hwnd, (HMENU)Input_Time, NULL, NULL);
+			button_okl = CreateWindow(L"button", L"开点！", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 20, 100, 70, 50, hwnd, (HMENU)BUTTON_SURE, NULL, NULL);
+			button_okr = CreateWindow(L"button", L"修改按键", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 100, 100, 90, 50, hwnd, (HMENU)BUTTON_SElECT_KEY, NULL, NULL);
+			button_cancel = CreateWindow(L"button", L"取消", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 200, 100, 70, 50, hwnd, (HMENU)BUTTON_CANCEL, NULL, NULL);
 			SendMessage(text1, WM_SETFONT, (WPARAM)font, TRUE);
 			SendMessage(button_okl, WM_SETFONT, (WPARAM)font, TRUE);
 			SendMessage(button_okr, WM_SETFONT, (WPARAM)font, TRUE);
@@ -447,7 +876,7 @@ LRESULT WINAPI TimeReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			switch (LOWORD(wParam))
 			{
-				case BUTTON_SUREL:
+				case BUTTON_SURE:
 				{
 					CString temp;
 					GetDlgItemText(hwnd, Input_Time, temp.GetBuffer(11), 11);
@@ -464,7 +893,7 @@ LRESULT WINAPI TimeReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						count_time *= 1000;
 						SendMessage(hwnd, WM_CLOSE, NULL, NULL);
 						SendMessage(main_win, WM_SYSCOMMAND, SC_MINIMIZE, NULL);
-						std::thread click(ClickL, count_time);
+						std::thread click(Click, count_time);
 						Sleep(1000);
 						click.detach();
 						Sleep(10);
@@ -472,29 +901,12 @@ LRESULT WINAPI TimeReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					}
 					break;
 				}
-				case BUTTON_SURER:
+				case BUTTON_SElECT_KEY:
 				{
-					CString temp;
-					GetDlgItemText(hwnd, Input_Time, temp.GetBuffer(10), 10);
-					temp.ReleaseBuffer();
-					double count_time = _wtof(temp);
-					if (count_time < 0 || count_time >= 10000000000)
-						MessageBox(NULL, L"输入范围在0~9999999999之间", L"FBI Warning!", MB_OK);
-					else if (count_time == 9999999999)
-						MessageBox(NULL, L"经计算，您可能至少需要等10代人的时间才能实现一次单击", L"FBI Warning!", MB_OK);
-					else if (count_time >= 2491344000)
-						MessageBox(NULL, L"您知道人类平均寿命在79年吗？", L"FBI Warning!", MB_OK);
-					else
-					{
-						count_time *= 1000;
-						SendMessage(hwnd, WM_CLOSE, NULL, NULL);
-						SendMessage(main_win, WM_SYSCOMMAND, SC_MINIMIZE, NULL);
-						std::thread click(ClickR, count_time);
-						Sleep(1000);
-						click.detach();
-						Sleep(10);
-						temp.ReleaseBuffer(10);
-					}
+					GetKey();
+					SetNowKeyClick();
+					SetWindowText(hwnd_now_key, now_key_click);
+					SendMessage(hwnd, WM_PAINT, NULL, NULL);
 					break;
 				}
 				case BUTTON_CANCEL:
@@ -518,7 +930,7 @@ LRESULT WINAPI TimeReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-LRESULT WINAPI React(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hwndButton1, hwndButton2, hwndButton3, hwndButton4, text;
 	bool record_button = false;
@@ -609,6 +1021,7 @@ LRESULT WINAPI React(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_CLOSE:
 		{
+			SaveIni();
 			DeleteObject(font);
 			break;
 		}
@@ -623,7 +1036,9 @@ LRESULT WINAPI React(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
+	//init
 	CreateData();
+	SetIni();
 	memset(point, 0, sizeof(point));
 	memset(key_press, 0, sizeof(key_press));
 	memset(i_down, 0, sizeof(i_down));
@@ -633,7 +1048,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//main_window属性
 	main_window.cbSize = sizeof(main_window);
 	main_window.style = CS_VREDRAW | CS_HREDRAW;
-	main_window.lpfnWndProc = React;
+	main_window.lpfnWndProc = WinProc;
 	main_window.cbClsExtra = 0;
 	main_window.cbWndExtra = 0;
 	main_window.hInstance = hInstance;
@@ -646,7 +1061,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	time_input.cbSize = sizeof(time_input);
 	time_input.style = CS_VREDRAW | CS_HREDRAW;
-	time_input.lpfnWndProc = TimeReact;
+	time_input.lpfnWndProc = TimeWinProc;
 	time_input.cbClsExtra = 0;
 	time_input.cbWndExtra = 0;
 	time_input.hInstance = hInstance;
@@ -659,7 +1074,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	record_input.cbSize = sizeof(record_input);
 	record_input.style = CS_VREDRAW | CS_HREDRAW;
-	record_input.lpfnWndProc = RecordInputReact;
+	record_input.lpfnWndProc = RecordInputWinProc;
 	record_input.cbClsExtra = 0;
 	record_input.cbWndExtra = 0;
 	record_input.hInstance = hInstance;
@@ -722,6 +1137,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//TranslateMessage(&msg);	//仅键盘 
 		DispatchMessageW(&msg);
 	}
-
 	return 0;
 }
