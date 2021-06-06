@@ -1,7 +1,7 @@
 如你所见，这是一个“鼠标连点器”和“键盘+鼠标记录器”
 
 功能：</br>
-1.鼠标左/右键的连点</br>
+1.大部分鼠标/键盘按键的连点</br>
 2.键盘+鼠标操作的记录与再现
 
 特殊情况：</br>
@@ -16,7 +16,7 @@
 As you can see, this is a "mouse clicker" and "keyboard+mouse recorder"
 
 Functions：</br>
-1.Click the left/right button of your mouse</br>
+1.Help you to click almost all the buttons of your mouse and keyboard</br>
 2.Record the action of your mouse and keyboard</br>
 
 Specially:</br>
