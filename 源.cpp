@@ -58,6 +58,8 @@ void GetKey()
 				continue;
 		}
 	}
+	HWND tips = FindWindow(L"Tips", NULL);
+	SendMessage(tips, WM_CLOSE, NULL, NULL);
 }
 
 void SetNowKeyClick()
@@ -708,6 +710,16 @@ LRESULT WINAPI RecordInputWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 			SendMessage(button_ok, WM_SETFONT, (WPARAM)font, TRUE);
 			break;
 		}
+		case WM_CTLCOLORSTATIC:
+		{
+			if ((HWND)lParam == GetDlgItem(hwnd, 1))//获得指定标签句柄用来对比
+			{
+				SetTextColor((HDC)wParam, RGB(0, 0, 0));//设置文本颜色
+				SetBkMode((HDC)wParam, TRANSPARENT);//设置背景透明
+			}
+			return (INT_PTR)GetStockObject((NULL_BRUSH));
+			break;
+		}
 		case WM_COMMAND:
 		{
 			switch (LOWORD(wParam))
@@ -750,7 +762,6 @@ LRESULT WINAPI RecordInputWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
 		}
 		case WM_CLOSE:
 		{
-			DeleteObject(font);
 			break;
 		}
 		case WM_DESTROY:
@@ -773,6 +784,16 @@ LRESULT WINAPI RecordOutputReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		button_ok = CreateWindow(L"button", L"确定", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 165, 100, 70, 50, hwnd, (HMENU)BUTTON_OUTPUT, NULL, NULL);
 		SendMessage(name_get, WM_SETFONT, (WPARAM)font, TRUE);
 		SendMessage(button_ok, WM_SETFONT, (WPARAM)font, TRUE);
+		break;
+	}
+	case WM_CTLCOLORSTATIC:
+	{
+		if ((HWND)lParam == GetDlgItem(hwnd, 1))//获得指定标签句柄用来对比
+		{
+			SetTextColor((HDC)wParam, RGB(0, 0, 0));//设置文本颜色
+			SetBkMode((HDC)wParam, TRANSPARENT);//设置背景透明
+		}
+		return (INT_PTR)GetStockObject((NULL_BRUSH));
 		break;
 	}
 	case WM_COMMAND:
@@ -826,7 +847,6 @@ LRESULT WINAPI RecordOutputReact(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		}
 	case WM_CLOSE:
 	{
-		DeleteObject(font);
 		break;
 	}
 	case WM_DESTROY:
@@ -871,6 +891,7 @@ LRESULT WINAPI TimeWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				SetBkMode((HDC)wParam, TRANSPARENT);//设置背景透明
 			}
 			return (INT_PTR)GetStockObject((NULL_BRUSH));
+			break;
 		}
 		case WM_COMMAND:
 		{
@@ -903,7 +924,15 @@ LRESULT WINAPI TimeWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				}
 				case BUTTON_SElECT_KEY:
 				{
-					GetKey();
+					std::thread getkey(GetKey);
+					getkey.detach();
+					CreateWindowEx(NULL, L"Tips", L"提示", WS_VISIBLE | WM_CTLCOLORSTATIC, 300, 300, 250, 100, hwnd, NULL, NULL, NULL);
+					MSG msg_newpage;
+					while (GetMessageW(&msg_newpage, NULL, 0, 0))
+					{
+						TranslateMessage(&msg_newpage);
+						DispatchMessageW(&msg_newpage);
+					}
 					SetNowKeyClick();
 					SetWindowText(hwnd_now_key, now_key_click);
 					SendMessage(hwnd, WM_PAINT, NULL, NULL);
@@ -918,7 +947,6 @@ LRESULT WINAPI TimeWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		case WM_CLOSE:
 		{
-			DeleteObject(font);
 			break;
 		}
 		case WM_DESTROY:
@@ -930,13 +958,47 @@ LRESULT WINAPI TimeWinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
+LRESULT WINAPI TipsProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	HWND text;
+	switch (msg)
+	{
+	case WM_CREATE:
+	{
+		text = CreateWindow(L"static", L"请单击想选择的按键", WS_CHILD | WS_VISIBLE, 20, 20, 200, 36, hwnd, (HMENU)1, NULL, 0);
+		SendMessage(text, WM_SETFONT, (WPARAM)font, TRUE);
+		break;
+	}
+	case WM_CTLCOLORSTATIC:
+	{
+		if ((HWND)lParam == GetDlgItem(hwnd, 1))//获得指定标签句柄用来对比
+		{
+			SetTextColor((HDC)wParam, RGB(0, 0, 0));//设置文本颜色
+			SetBkMode((HDC)wParam, TRANSPARENT);//设置背景透明
+		}
+		return (INT_PTR)GetStockObject((NULL_BRUSH));
+		break;
+	}
+	case WM_CLOSE:
+	{
+		break;
+	}
+	case WM_DESTROY:
+	{
+		PostQuitMessage(0);
+		break;
+	}
+	}
+	return DefWindowProc(hwnd, msg, wParam, lParam);
+}
+
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	HWND hwndButton1, hwndButton2, hwndButton3, hwndButton4, text;
 	bool record_button = false;
 	switch (msg)
 	{
-		case WM_CREATE:
+		case WM_PAINT:
 		{
 			text = CreateWindow(L"static", version, WS_CHILD | WS_VISIBLE, 90, 50, 200, 20, hwnd, (HMENU)1, NULL, 0);
 			hwndButton1 = CreateWindowEx(NULL, TEXT("Button"), TEXT("1.连点器（按“ESC”退出）"), WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 10, 100, 265, 50, hwnd, (HMENU)BUTTON1, NULL, NULL);
@@ -958,6 +1020,7 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				SetBkMode((HDC)wParam, TRANSPARENT);//设置背景透明
 			}
 			return (INT_PTR)GetStockObject((NULL_BRUSH));
+			break;
 		}
 		case WM_COMMAND:
 		{
@@ -1022,11 +1085,11 @@ LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_CLOSE:
 		{
 			SaveIni();
-			DeleteObject(font);
 			break;
 		}
 		case WM_DESTROY:
 		{
+			DeleteObject(font);
 			PostQuitMessage(0);
 			return 0;
 		}
@@ -1043,7 +1106,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	memset(key_press, 0, sizeof(key_press));
 	memset(i_down, 0, sizeof(i_down));
 
-	WNDCLASSEX main_window, time_input, record_input, record_output;
+	WNDCLASSEX main_window, time_input, record_input, record_output, tips;
 
 	//main_window属性
 	main_window.cbSize = sizeof(main_window);
@@ -1098,6 +1161,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	record_output.lpszClassName = L"Record_Output";
 	record_output.hIconSm = NULL;
 
+	tips.cbSize = sizeof(tips);
+	tips.style = CS_VREDRAW | CS_HREDRAW;
+	tips.lpfnWndProc = TipsProc;
+	tips.cbClsExtra = 0;
+	tips.cbWndExtra = 0;
+	tips.hInstance = hInstance;
+	tips.hIcon = NULL;
+	tips.hCursor = NULL;
+	tips.hbrBackground = CreateSolidBrush(RGB(255, 255, 255));
+	tips.lpszMenuName = NULL;
+	tips.lpszClassName = L"Tips";
+	tips.hIconSm = NULL;
 
 	//注册窗口
 	if (0 == RegisterClassExW(&main_window))
@@ -1121,6 +1196,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (0 == RegisterClassExW(&record_output))
 	{
 		MessageBox(NULL, L"record output wrong", L"Regist", MB_OK);
+		return 0;
+	}
+
+	if (0 == RegisterClassExW(&tips))
+	{
+		MessageBox(NULL, L"tips wrong", L"Regist", MB_OK);
 		return 0;
 	}
 
