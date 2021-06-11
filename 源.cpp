@@ -453,8 +453,9 @@ bool IsSameName(CString output_txt)
 void Click(double count_time)
 {
 	bool Continue = true;
+	int temp_key = key_click;
 	double time0 = GetTickCount(), time1 = 0;
-	if (key_click == 1)
+	if (temp_key == 1)
 		while (true)
 		{
 			if (Continue == true)
@@ -491,7 +492,7 @@ void Click(double count_time)
 			}
 			Sleep(1);
 		}
-	else if (key_click == 2)
+	else if (temp_key == 2)
 		while (true)
 		{
 			if (Continue == true)
@@ -545,9 +546,9 @@ void Click(double count_time)
 				}
 				if ((time1 - time0) > count_time)
 				{
-					keybd_event(key_click, 0, 0, 0);
+					keybd_event(temp_key, 0, 0, 0);
 					Sleep(10);
-					keybd_event(key_click, 0, KEYEVENTF_KEYUP, 0);
+					keybd_event(temp_key, 0, KEYEVENTF_KEYUP, 0);
 					time0 = GetTickCount();
 				}
 			}
